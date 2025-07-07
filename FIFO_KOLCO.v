@@ -15,7 +15,7 @@ module ring_fifo #(
     reg [$clog2(DEPTH)-1:0] wr_ptr;
     reg [$clog2(DEPTH)-1:0] rd_ptr;
     wire empty = (wr_ptr == rd_ptr);
-    wire full = (wr_ptr + 1 == rd_ptr) || (wr_ptr == DEPTH-1 && rd_ptr == 0);
+    assign full = (wr_ptr + 1 == rd_ptr) || (wr_ptr == DEPTH-1 && rd_ptr == 0);
     assign dataout = buffer[rd_ptr];
     assign val = ~empty;
     
