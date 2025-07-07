@@ -18,7 +18,8 @@ module fifo #(
     assign val = ~empty;
     assign full = (cnt == DEPTH);
     integer i;
-    assign dataout = buffer[cnt - 1];
+    assign dataout = empty ? 0 : buffer[cnt - 1];
+
     always @(posedge clk) begin
         if (reset) begin
             cnt <= 0;
@@ -32,7 +33,7 @@ module fifo #(
             end
         end
         else if (write && !read && !full) begin
-            for (i = DEPTH-1; i > 0; i= i-1) begin
+            for (i = DEPTH-1; i > 0; i = i - 1) begin
                 buffer[i] <= buffer[i-1];  
             end
             buffer[0] <= datain;          
