@@ -22,7 +22,7 @@ module testbench;
         $finish();
     end
 
-    ring_fifo #(
+    fifo #(
         .DEPTH(16),
         .DATA_WIDTH(DATA_W)
     ) fifo_sh (
@@ -36,7 +36,7 @@ module testbench;
         .full(full_sh)
     );
 
-    fifo #(
+    ring_fifo #(
         .DEPTH(16),
         .DATA_WIDTH(DATA_W)
     ) fifo_cr (
