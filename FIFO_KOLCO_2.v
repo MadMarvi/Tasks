@@ -11,14 +11,13 @@ module ring_fifo #(
     output wire val,
     output wire full
 );
-    localparam size = $clog2(DEPTH); 
-    localparam cur_cond = (wr_ptr == rd_ptr); // Состояние, при котором необходимо установить full или empty на 1
-    reg [DATA_WIDTH-1:0] buffer [0:DEPTH-1];
+     localparam size = $clog2(DEPTH); 
     reg [size - 1:0] wr_ptr;    // такая разрядность, тк это указатель на индекс элемента в буфере(Элементов DEPTH)
     reg [size - 1:0] rd_ptr;
+    reg [DATA_WIDTH-1:0] buffer [0:DEPTH-1];
     reg lst_op;                 //Регистр для запоминания последней операции(1 при записи, 0 при чтении)
-    wire empty = cur_cond & !lst_op; // при lst_op = 0, утстанавливаем empty 1
-    wire full = cur_cond & lst_op; // при lst_op = 1, утстанавливаем full 1
+    wire empty = (wr_ptr == rd_ptr) & !lst_op; // при lst_op = 0, утстанавливаем empty 1
+    assign full = (wr_ptr == rd_ptr) & lst_op; // при lst_op = 1, утстанавливаем full 1
     assign dataout = buffer[rd_ptr]; 
     assign val = ~empty;
     
