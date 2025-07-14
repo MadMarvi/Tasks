@@ -41,7 +41,7 @@ module fifo #(
         end
     end    
 
-    generate for(i=1; i<DEPTH; i = i + 1)
+    generate for(i=1; i<DEPTH; i = i + 1) // Сдвиг только валидных переменных влево
     begin: loop0
         always @(posedge clk)
             buffer[i] <= write & write_permitted & (i<cnt) ? buffer[i-1] : buffer[i];
