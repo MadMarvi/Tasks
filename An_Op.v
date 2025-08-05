@@ -24,4 +24,39 @@ module operand_analyzer #(
     assign is_normal = ~all_zeros_exp && ~all_ones_exp;
     assign is_infinity = all_ones_exp && ~non_zero_mantissa;
     assign is_nan = all_ones_exp && non_zero_mantissa;
+
+endmodule
+
+module operation_analyzer #(
+    parameter EXP_WIDTH = 8,
+    parameter MANT_WIDTH = 23
+)(
+    input wire [EXP_WIDTH+MANT_WIDTH:0] op1,
+    input wire [EXP_WIDTH+MANT_WIDTH:0] op2,
+    output wire invalid_operation,
+    output wire is_nan_operand
+);
+    operand_analyzer #(.EXP_WIDTH(EXP_WIDTH), .MANT_WIDTH(MANT_WIDTH)) op1_analyzer (
+        .operand(op1),
+        .is_zero(),
+        .is_normal(),
+        .is_denormal(),
+        .is_infinity(is_inf1),
+        .is_nan(is_nan1)
+    );
+    
+    operand_analyzer #(.EXP_WIDTH(EXP_WIDTH), .MANT_WIDTH(MANT_WIDTH)) op2_analyzer (
+        .operand(op2),
+        .is_zero(is_zero2),
+        .is_normal(),
+        .is_denormal(),
+        .is_infinity(is_inf2),
+        .is_nan(is_nan2)
+    );
+    
+    // Неправильная операция inf * 0
+    assign invalid_operation = (is_inf1 && is_zero2) || (is_inf2 && is_zero1);
+    
+    // Хотя бы один операнд NaN
+    assign is_nan_operand = is_nan1 || is_nan2;
 endmodule
