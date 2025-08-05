@@ -55,15 +55,16 @@ module mul #(
     // Суммирование всех part_product
     wire [2*WIDTH-1:0] sum [WIDTH:0];
     
-    assign sum[0] = part_product[0];
+    assign sum[WIDTH] = part_product[WIDTH];
     
     generate
-        for(i=1; i<=WIDTH; i=i+1) begin: sum_loop
-            assign sum[i] = sum[i-1] + part_product[i];
+        for(i = WIDTH - 1; i>0; i = i - 1) begin: sum_loop
+            assign sum[i] = sum[i+1] + part_product[i];
         end
     endgenerate
     
     assign result = sum[WIDTH];
 endmodule
+
 
 
