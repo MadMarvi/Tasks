@@ -44,10 +44,11 @@ module mul #(
     
     genvar i;
     generate 
-        for(i=0; i<=WIDTH; i=i+1) begin: loop1
+        for(i = WIDTH - 1; i>0; i = i - 1) 
+            begin: loop1
             assign part_product[i] = val[i] ? 
-                                            ({2*WIDTH{sign[i]}} ^ op_1) + sign[i] << i 
-                                        :    {2*WIDTH{1'b0}};
+                                                 ({2*WIDTH{sign[i]}} ^ op_1) + sign[i] << i 
+                                            :    {2*WIDTH{1'b0}};
         end
     endgenerate
     
@@ -64,4 +65,5 @@ module mul #(
     
     assign result = sum[WIDTH];
 endmodule
+
 
