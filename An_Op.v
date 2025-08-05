@@ -38,7 +38,7 @@ module operation_analyzer #(
 );
     operand_analyzer #(.EXP_WIDTH(EXP_WIDTH), .MANT_WIDTH(MANT_WIDTH)) op1_analyzer (
         .operand(op1),
-        .is_zero(),
+        .is_zero(is_zero1),
         .is_normal(),
         .is_denormal(),
         .is_infinity(is_inf1),
