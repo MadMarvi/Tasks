@@ -33,7 +33,7 @@ module operation_analyzer #(
     input wire [EXP_WIDTH+MANT_WIDTH:0] op1,
     input wire [EXP_WIDTH+MANT_WIDTH:0] op2,
     output wire invalid_operation,
-    output wire [3:0] operation_status       // [result_is_nan, result_is_inf, result_is_zero, invalid_operation]
+    output wire [3:0] operation_status       // [result_is_nan, result_is_clear_inf, result_is_zero, invalid_operation]
 );
     wire [4:0] op1_status;
     wire [4:0] op2_status;
@@ -62,9 +62,10 @@ module operation_analyzer #(
     //вектор состояний операции
     assign operation_status = {
         invalid_operation || is_nan_operand,                                // result_is_nan
-        (is_inf1 || is_inf2) && !is_nan_operand && !(is_zero1 || is_zero2), // result_is_inf
+        (is_inf1 || is_inf2) && !is_nan_operand && !(is_zero1 || is_zero2), // result_is_clear_inf
         (is_zero1 || is_zero2) && !is_nan_operand && !(is_inf1 || is_inf2), // result_is_zero
         ((is_inf1 && is_zero2) || (is_inf2 && is_zero1))                    // invalid_operation
     };
 
 endmodule
+
