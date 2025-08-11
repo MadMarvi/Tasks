@@ -1,6 +1,7 @@
 module operand_analyzer #(
-    parameter EXP_WIDTH = 8,
-    parameter MANT_WIDTH = 23
+    parameter IS_DOUBLE = 0,
+    parameter EXP_WIDTH = IS_DOUBLE == 1 ? 11 : 8,
+    parameter MANT_WIDTH = IS_DOUBLE == 1 ? 52 : 23
 )(
     input wire [EXP_WIDTH+MANT_WIDTH:0] operand,  // [sign][exp][mantissa]
     output wire [4:0] operand_status              // [is_nan, is_infinity, is_denormal, is_normal, is_zero]
@@ -68,4 +69,5 @@ module operation_analyzer #(
     };
 
 endmodule
+
 
