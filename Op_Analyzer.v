@@ -37,6 +37,7 @@ module operation_analyzer #(
     output wire [3:0] operation_status       // [result_is_nan, result_is_clear_inf, result_is_zero, invalid_operation]
 );
     wire invalid_operation;
+    wire is_nan_operand;
     wire [4:0] op1_status;
     wire [4:0] op2_status;
     
@@ -67,7 +68,7 @@ module operation_analyzer #(
     wire is_nan2 = op2_status[4];
     
     // Хотя бы один операнд NaN
-    wire is_nan_operand = is_nan1 || is_nan2;
+    assign is_nan_operand = is_nan1 || is_nan2;
     
     // недопустимые опрации inf * 0
     assign invalid_operation = (is_inf1 && is_zero2) || (is_inf2 && is_zero1);
@@ -80,6 +81,7 @@ module operation_analyzer #(
         invalid_operation                                  // invalid_operation
     };
 endmodule
+
 
 
 
