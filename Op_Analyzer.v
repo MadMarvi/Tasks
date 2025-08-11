@@ -28,8 +28,9 @@ module operand_analyzer #(
 endmodule
 
 module operation_analyzer #(
-    parameter EXP_WIDTH = 8,
-    parameter MANT_WIDTH = 23
+    parameter IS_DOUBLE = 0,
+    parameter EXP_WIDTH = IS_DOUBLE == 1 ? 11 : 8,
+    parameter MANT_WIDTH = IS_DOUBLE == 1 ? 52 : 23
 )(
     input wire [EXP_WIDTH+MANT_WIDTH:0] op1,
     input wire [EXP_WIDTH+MANT_WIDTH:0] op2,
@@ -39,12 +40,20 @@ module operation_analyzer #(
     wire [4:0] op1_status;
     wire [4:0] op2_status;
     
-    operand_analyzer #(.EXP_WIDTH(EXP_WIDTH), .MANT_WIDTH(MANT_WIDTH)) op1_analyzer (
+    operand_analyzer #(
+        .IS_DOUBLE(IS_DOUBLE),
+        .EXP_WIDTH(EXP_WIDTH),
+        .MANT_WIDTH(MANT_WIDTH)
+    ) op1_analyzer (
         .operand(op1),
         .operand_status(op1_status)
     );
     
-    operand_analyzer #(.EXP_WIDTH(EXP_WIDTH), .MANT_WIDTH(MANT_WIDTH)) op2_analyzer (
+    operand_analyzer #(
+        .IS_DOUBLE(IS_DOUBLE),
+        .EXP_WIDTH(EXP_WIDTH),
+        .MANT_WIDTH(MANT_WIDTH)
+    ) op2_analyzer (
         .operand(op2),
         .operand_status(op2_status)
     );
@@ -60,14 +69,16 @@ module operation_analyzer #(
     // Хотя бы один операнд NaN
     wire is_nan_operand = is_nan1 || is_nan2;
     
-    //вектор состояний операции
+    // недопустимые опрации inf * 0
+    assign invalid_operation = (is_inf1 && is_zero2) || (is_inf2 && is_zero1);
+    
+    // Вектор состояний операции
     assign operation_status = {
-        invalid_operation || is_nan_operand,                                // result_is_nan
-        (is_inf1 || is_inf2) && !is_nan_operand && !(is_zero1 || is_zero2), // result_is_clear_inf
-        (is_zero1 || is_zero2) && !is_nan_operand && !(is_inf1 || is_inf2), // result_is_zero
-        ((is_inf1 && is_zero2) || (is_inf2 && is_zero1))                    // invalid_operation
+        is_nan_operand,                                     // result_is_nan
+        (is_inf1 || is_inf2) && !is_nan_operand,           // result_is_clear_inf
+        (is_zero1 || is_zero2) && !is_nan_operand,         // result_is_zero
+        invalid_operation                                  // invalid_operation
     };
-
 endmodule
 
 
