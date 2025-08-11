@@ -36,6 +36,7 @@ module operation_analyzer #(
     input wire [EXP_WIDTH+MANT_WIDTH:0] op2,
     output wire [3:0] operation_status       // [result_is_nan, result_is_clear_inf, result_is_zero, invalid_operation]
 );
+    wire invalid_operation;
     wire [4:0] op1_status;
     wire [4:0] op2_status;
     
@@ -79,6 +80,7 @@ module operation_analyzer #(
         invalid_operation                                  // invalid_operation
     };
 endmodule
+
 
 
 
