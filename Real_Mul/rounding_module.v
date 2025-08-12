@@ -31,7 +31,7 @@ wire round_up_plus_inf  = ~sign_bit & ~low_part_is_zero; // Для + inf есл�
 wire round_up_min_inf   =  sign_bit & ~low_part_is_zero; // Для - inf если число отрицательное
 
 wire round_nearest_even = ((guard_bit & sticky_bit) | 
-                         (guard_bit & ~sticky_bit & round_bit)) & ~low_part_is_zero;
+                         (guard_bit & ~sticky_bit & round_bit));
 
 // Выбор инкремента на основе режима округления
 wire increment =
