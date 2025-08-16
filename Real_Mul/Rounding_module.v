@@ -6,6 +6,7 @@ module rounding_module #(
                                   // 01 - Округление к + inf
                                   // 10 - Округление к - inf
                                   // 11 - Округление к ближайшему четному
+    input  wire res_sign
     output wire [((IS_DOUBLE) ? 52 : 23):0] data_out, 
     output wire inexact              // Флаг точности (1 - округление не потребовалось)
 );
@@ -18,7 +19,6 @@ wire [HIGH_PART_WIDTH:0] high_part = data_in[TOTAL_WIDTH-1:LOW_PART_WIDTH];
 wire [LOW_PART_WIDTH-1:0] low_part = data_in[LOW_PART_WIDTH-1:0];
 
 wire low_part_is_zero = (low_part == 0); // флаг на то что округления не было
-wire sign_bit = high_part[HIGH_PART_WIDTH]; // Знаковый бит
 
 // биты для окургления к четному
 wire round_bit  = high_part[0];
@@ -26,8 +26,8 @@ wire guard_bit  = low_part[LOW_PART_WIDTH-1];
 wire sticky_bit = (IS_DOUBLE) ? (|low_part[LOW_PART_WIDTH-2:0]) : (|low_part[22:0]);
 
 // Вычисление инкремента для каждого режима округления
-wire round_up_plus_inf  = ~sign_bit & ~low_part_is_zero; // Для + inf если число положительное
-wire round_up_min_inf   =  sign_bit & ~low_part_is_zero; // Для - inf если число отрицательное
+wire round_up_plus_inf  = ~res_sign & ~low_part_is_zero; // Для + inf если число положительное
+wire round_up_min_inf   =  res_sign & ~low_part_is_zero; // Для - inf если число отрицательное
 
 wire round_nearest_even = ((guard_bit & sticky_bit) | 
                          (guard_bit & ~sticky_bit & round_bit));
