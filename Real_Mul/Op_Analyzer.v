@@ -75,9 +75,9 @@ module operation_analyzer #(
     
     // Вектор состояний операции
     assign operation_status = {
-        is_nan_operand,                                     // result_is_nan
-        (is_inf1 || is_inf2) && !is_nan_operand,           // result_is_clear_inf
-        (is_zero1 || is_zero2) && !is_nan_operand,         // result_is_zero
-        invalid_operation                                  // invalid_operation
+        is_nan_operand,                                                            // result_is_nan
+        (is_inf1 || is_inf2)   && !is_nan_operand & !invalid_operation,            // result_is_clear_inf
+        (is_zero1 || is_zero2) && !is_nan_operand & !invalid_operation,            // result_is_zero
+        invalid_operation                                                          // invalid_operation
     };
 endmodule
