@@ -8,7 +8,7 @@ module pre_res #(
     input wire [TOTAL_WIDTH-1:0] op2,
     input wire [4:0] op1_status, //[is_nan, is_infinity, is_denormal, is_normal, is_zero]
     input wire [4:0] op2_status,
-    input wire [3:0] operation_status,
+    input wire [3:0] operation_status, // [result_is_nan, result_is_clear_inf, result_is_zero, invalid_operation]
     output wire [TOTAL_WIDTH-1:0] result
 );
     wire sign1 = op1[TOTAL_WIDTH-1];
