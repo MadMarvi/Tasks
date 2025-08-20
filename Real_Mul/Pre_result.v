@@ -6,7 +6,7 @@ module pre_res #(
 )(
     input wire [TOTAL_WIDTH-1:0] op1,
     input wire [TOTAL_WIDTH-1:0] op2,
-    input wire [4:0] op1_status,
+    input wire [4:0] op1_status, //[is_nan, is_infinity, is_denormal, is_normal, is_zero]
     input wire [4:0] op2_status,
     input wire [3:0] operation_status,
     output wire [TOTAL_WIDTH-1:0] result
