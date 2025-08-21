@@ -4,17 +4,15 @@ module pre_res #(
     parameter MANT_WIDTH = IS_DOUBLE == 1 ? 52 : 23,
     parameter TOTAL_WIDTH = EXP_WIDTH + MANT_WIDTH + 1
 )(
-    input wire [TOTAL_WIDTH-1:0] op1,
-    input wire [TOTAL_WIDTH-1:0] op2,
-    input wire [4:0] op1_status, //[is_nan, is_infinity, is_denormal, is_normal, is_zero]
-    input wire [4:0] op2_status,
-    input wire [3:0] operation_status, // [result_is_nan, result_is_clear_inf, result_is_zero, invalid_operation]
+    input  wire result_sign,  
+    input  wire [TOTAL_WIDTH-1:0] op1,
+    input  wire [TOTAL_WIDTH-1:0] op2,
+    input  wire [4:0] op1_status,        // [is_nan, is_infinity, is_denormal, is_normal, is_zero]
+    input  wire [4:0] op2_status,
+    input  wire [3:0] operation_status,  // [result_is_nan, result_is_clear_inf, result_is_zero, invalid_operation]
     output wire [TOTAL_WIDTH-1:0] result
 );
-    wire sign1 = op1[TOTAL_WIDTH-1];
-    wire sign2 = op2[TOTAL_WIDTH-1];
-    wire result_sign = sign1 ^ sign2; // XOR знаков для умножения
-    
+
     // Извлекаем флаги из статусов
     wire is_nan1  = op1_status[4];
     wire is_inf1  = op1_status[3];
@@ -34,9 +32,8 @@ module pre_res #(
     wire [TOTAL_WIDTH-1:0] op1_with_nan_fix = {op1[TOTAL_WIDTH-1:MANT_WIDTH], 1'b1, op1[MANT_WIDTH-2:0]};
     wire [TOTAL_WIDTH-1:0] op2_with_nan_fix = {op2[TOTAL_WIDTH-1:MANT_WIDTH], 1'b1, op2[MANT_WIDTH-2:0]};
     
-    assign nan_result = (is_nan1 && is_nan2) ? op1_with_nan_fix :  // оба NaN - берем op1
-                         is_nan1             ? op1_with_nan_fix :  // только op1 NaN
-                                               op2_with_nan_fix ;  // только op2 NaN
+    assign nan_result =  is_nan1 ? op1_with_nan_fix : op2_with_nan_fix; 
+                        
     
     // Обработка inf * zero
     wire [TOTAL_WIDTH-1:0] inf_zero_result;
@@ -50,10 +47,12 @@ module pre_res #(
     wire [TOTAL_WIDTH-1:0] inf_result;
     assign inf_result = {result_sign, {EXP_WIDTH{1'b1}}, {MANT_WIDTH{1'b0}}};
     
-    // Выбор результата
-    assign result = (result_is_nan)       ? nan_result      :
-                    (invalid_operation)   ? inf_zero_result :
-                    (result_is_zero)      ? zero_result     :
-                    (result_is_clear_inf) ? inf_result      :
-                    {TOTAL_WIDTH{1'b0}}                     ; // По умолчанию - ноль
+    // Параллельный выбор результата с использованием маскирования
+    wire [TOTAL_WIDTH-1:0] default_result = {TOTAL_WIDTH{1'b0}};
+    
+    assign result = ({TOTAL_WIDTH{result_is_nan}}       & nan_result)      |
+                    ({TOTAL_WIDTH{invalid_operation}}   & inf_zero_result) |
+                    ({TOTAL_WIDTH{result_is_zero}}      & zero_result)     |
+                    ({TOTAL_WIDTH{result_is_clear_inf}} & inf_result)      |
+                    ({TOTAL_WIDTH{!(result_is_nan | invalid_operation | result_is_zero | result_is_clear_inf)}} & default_result);
 endmodule
