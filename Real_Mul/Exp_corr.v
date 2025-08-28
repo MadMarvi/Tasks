@@ -1,12 +1,13 @@
 module exp_corr  #(
     parameter IS_DOUBLE  = 0,
-    parameter EXP_WIDTH  = IS_DOUBLE == 1 ? 11 : 8
+    parameter EXP_WIDTH  = IS_DOUBLE == 1 ? 11 : 8,
+    parameter MANT_WIDTH = IS_DOUBLE == 1 ? 52 : 23
 )(
-    input  wire                  overflow,
-    input  wire [23:0]           mant,
-    input  wire [EXP_WIDTH-1:0]  exp_a,
-    input  wire [EXP_WIDTH-1:0]  exp_b,
-    output wire [EXP_WIDTH+1:0]  exp_crr
+    input  wire                              overflow,
+    input  wire [2*MANT_WIDTH+1:0]           mant,
+    input  wire [EXP_WIDTH-1:0]              exp_a,
+    input  wire [EXP_WIDTH-1:0]              exp_b,
+    output wire [EXP_WIDTH-1:0]              exp_crr
 );
 
     // Вычисляем bias в зависимости от типа
@@ -17,9 +18,9 @@ module exp_corr  #(
     assign exp_sum = exp_a + exp_b - BIAS;
     
     // Определяем паттерны старших битов
-    wire pattern_01 = (mant[23:22] == 2'b01);
-    wire pattern_10 = (mant[23:22] == 2'b10);
-    wire pattern_11 = (mant[23:22] == 2'b11);
+    wire pattern_01 = (mant[2*MANT_WIDTH+1:2*MANT_WIDTH] == 2'b01);
+    wire pattern_10 = (mant[2*MANT_WIDTH+1:2*MANT_WIDTH] == 2'b10);
+    wire pattern_11 = (mant[2*MANT_WIDTH+1:2*MANT_WIDTH] == 2'b11);
     
     // Корректирующее значение
     wire [1:0] correction_value;
