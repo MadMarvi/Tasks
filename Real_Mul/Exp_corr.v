@@ -14,7 +14,7 @@ module exp_corr  #(
     
     // Сумма мантисс
     wire [EXP_WIDTH:0] exp_sum;
-    assign exp_sum = exp_a + exp_b;
+    assign exp_sum = exp_a + exp_b - BIAS;
     
     // Определяем паттерны старших битов
     wire pattern_01 = (mant[23:22] == 2'b01);
@@ -29,6 +29,6 @@ module exp_corr  #(
                                             2'b00;                      // +0 
     
     // Корректированная сумма
-    assign exp_crr = exp_sum + correction_value - BIAS;
+    assign exp_crr = exp_sum + correction_value;
 
 endmodule
