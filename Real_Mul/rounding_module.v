@@ -2,13 +2,13 @@ module rounding_module #(
     parameter IS_DOUBLE = 0,
     parameter HIGH_PART_WIDTH = (IS_DOUBLE) ? 52 : 23,
     parameter LOW_PART_WIDTH = (IS_DOUBLE) ? 53 : 24,
-    parameter TOTAL_WIDTH = (IS_DOUBLE) ? 106 : 48
+    parameter TOTAL_WIDTH = (IS_DOUBLE) ? 106 : 48,
+    parameter ROUND_MODE = 2'b11                        // 00 - Округление к нулю
+                                                        // 01 - Округление к + inf
+                                                        // 10 - Округление к - inf
+                                                        // 11 - Округление к ближайшему четному
 ) (         
-    input wire [TOTAL_WIDTH-1:0] data_in,  
-    input wire [1:0] round_mode,  // 00 - Округление к нулю
-                                  // 01 - Округление к + inf
-                                  // 10 - Округление к - inf
-                                  // 11 - Округление к ближайшему четному
+    input wire [TOTAL_WIDTH-1:0] data_in,                                                              
     input wire res_sign,
     output wire [HIGH_PART_WIDTH:0] data_out, 
     output wire inexact,           // Флаг точности (1 - округление не потребовалось)
@@ -34,9 +34,9 @@ wire round_nearest_even = ((guard_bit & sticky_bit) |
 
 // Выбор инкремента на основе режима округления
 wire increment =
-    (round_mode == 2'b01) ? round_up_plus_inf :
-    (round_mode == 2'b10) ? round_up_min_inf :
-    (round_mode == 2'b11) ? round_nearest_even :
+    (ROUND_MODE == 2'b01) ? round_up_plus_inf :
+    (ROUND_MODE == 2'b10) ? round_up_min_inf :
+    (ROUND_MODE == 2'b11) ? round_nearest_even :
     1'b0;
 
 // Проверка на переполнение (все биты high_part равны 1 и есть инкремент)
