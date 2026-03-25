@@ -28,7 +28,7 @@ module alu (
 			ALU_SRL:    result_o = a_i >> b_i;
 			ALU_SRA:    result_o = $signed(a_i) >> b_i;
 			ALU_OR:		result_o = a_i | b_i;
-			ALU_AND:		result_o = a_i & b_i;
+			ALU_AND:	result_o = a_i & b_i;
 			default: 	result_o = 32'b0;
 		endcase
 	end
@@ -37,9 +37,9 @@ module alu (
 			ALU_EQ:     flag_o = (a_i == b_i);
 			ALU_NE:		flag_o = (a_i != b_i);
 			ALU_LTS:    flag_o = ($signed(a_i) < $signed(b_i));
-			ALU_GES:		flag_o = ($signed(a_i) >= $signed(b_i));
-			ALU_LTU:		flag_o = a_i < b_i;
-			ALU_GEU:		flag_o = a_i >= b_i;
+			ALU_GES:	flag_o = ($signed(a_i) >= $signed(b_i));
+			ALU_LTU:	flag_o = a_i < b_i;
+			ALU_GEU:	flag_o = a_i >= b_i;
 			default: 	flag_o = 1'b0;
 		endcase
 	end
