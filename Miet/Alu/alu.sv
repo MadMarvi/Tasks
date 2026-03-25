@@ -29,9 +29,10 @@ module alu (
 			ALU_SRA:    result_o = $signed(a_i) >> b_i;
 			ALU_OR:		result_o = a_i | b_i;
 			ALU_AND:		result_o = a_i & b_i;
-			default: 	result_o = 1'b0;
+			default: 	result_o = 32'b0;
 		endcase
-		
+	end
+	always_comb begin
 		case(alu_op_i) // для операций flag_o
 			ALU_EQ:     flag_o = (a_i == b_i);
 			ALU_NE:		flag_o = (a_i != b_i);
@@ -42,6 +43,7 @@ module alu (
 			default: 	flag_o = 1'b0;
 		endcase
 	end
+end
 			
 	
 endmodule
