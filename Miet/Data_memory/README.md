@@ -1,0 +1,2 @@
+В данной лобораторной работе была реализована память данных, лабораторная работа схожа с лабораторной работой [Memory](https://github.com/MadMarvi/Tasks/tree/main/Miet/Memory). 
+Здесь также представлен модуль memory.pkg как и в лабораторной работе Memory, где был реализован регистровый файл. Также предоставлен тестбенч для проверки основного [модуля](https://github.com/MadMarvi/Tasks/blob/main/Miet/Data_memory/data_mem.sv)
