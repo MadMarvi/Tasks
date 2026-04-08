@@ -3,5 +3,5 @@
 ![](https://raw.githubusercontent.com/MPSU/APS/7ebed1ded906b045d4da62139192230f624565c5/.pic/Labs/lab_07_dp/fig_01.drawio.svg) 
 А в файле [processor_system](https://github.com/MadMarvi/Tasks/blob/main/Miet/Datapath/processor_system.sv) реализована данная схема   
 ![](https://github.com/MPSU/APS/blob/master/.pic/Labs/lab_07_dp/fig_02.drawio.svg)  
-В репозитории предоставлен [тестбенч](https://github.com/MadMarvi/Tasks/blob/main/Miet/Datapath/lab_07_tb_processor_system.sv) для модуля processor_system
+В репозитории предоставлен [тестбенч](https://github.com/MadMarvi/Tasks/blob/main/Miet/Datapath/lab_07_tb_processor_system.sv) для модуля processor_system.  
 Подробнее о ходе выполнения и реализации в [репозитории  МИЭТа](https://github.com/MPSU/APS/tree/master/Labs/07.%20Datapath)
