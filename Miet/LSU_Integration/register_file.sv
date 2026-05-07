@@ -11,8 +11,8 @@ module register_file(
   output logic [31:0] read_data2_o
 );
 	logic [31:0] rf_mem [0:31];
-	assign read_data1_o =  rf_mem[read_addr1_i];
-	assign read_data2_o =  rf_mem[read_addr2_i];
+	assign read_data1_o =  (read_addr1_i == 5'd0) ? 32'b0 : rf_mem[read_addr1_i];
+	assign read_data2_o =  (read_addr2_i == 5'd0) ? 32'b0 : rf_mem[read_addr2_i];
 	
 	always_ff @(posedge clk_i) begin
 		if(write_enable_i) begin
