@@ -1,3 +1,3 @@
-В данной 11 лабортаорной работе была реализовона интеграция модулей [csr_controller](https://github.com/MadMarvi/Tasks/blob/main/Miet/Interrupt%20subsystem/csr_controller.sv) и [inerrupt_controller](https://github.com/MadMarvi/Tasks/blob/main/Miet/Interrupt%20subsystem/interrupt_controller.sv).
-Также предоставлен тестбенч для провекри модлей. В работе была реализована схема, представленная ниже ![](https://github.com/MPSU/APS/blob/master/.pic/Labs/lab_11_irq_integration/fig_01.drawio.svg).  
+В данной 11 лабораторной работе была реализовона интеграция модулей [csr_controller](https://github.com/MadMarvi/Tasks/blob/main/Miet/Interrupt%20subsystem/csr_controller.sv) и [inerrupt_controller](https://github.com/MadMarvi/Tasks/blob/main/Miet/Interrupt%20subsystem/interrupt_controller.sv).
+Также предоставлен тестбенч для провекри модулей. В работе была реализована схема, представленная ниже ![](https://github.com/MPSU/APS/blob/master/.pic/Labs/lab_11_irq_integration/fig_01.drawio.svg).  
 Подробнее в [лабораторном практикуме МИЭТ](https://github.com/MPSU/APS/tree/master/Labs/11.%20Interrupt%20integration).
