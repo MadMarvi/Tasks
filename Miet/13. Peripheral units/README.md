@@ -38,15 +38,3 @@ processor_system.sv
 
 **Прошивка:** `lab_13_ps2_hex_instr.mem` — переименовать в `program.mem` и положить по пути `C:\Lab_Miet\program.mem` (путь жёстко зашит в `instr_mem.sv` через `$readmemh`, так как относительные пути нестабильно резолвятся между симуляторами).
 
-## Запуск симуляции (Vivado)
-
-1. Создать `C:\Lab_Miet\program.mem` (см. выше).
-2. Создать RTL-проект в Vivado, добавить все Design Sources из списка.
-3. Добавить `lab_13_tb_processor_system.sv` как Simulation Source, назначить **Set as Top**.
-4. Убедиться, что в Project Settings выбран конкретный Part (нужен для элаборации примитива `BUFG` в `sys_clk_rst_gen`).
-5. Flow Navigator → Simulation → **Run Behavioral Simulation**.
-6. В Tcl-консоли выполнить `run 4ms` (или Run All) — тестбенч завершается по `$finish` на 4 мс.
-
-**Проверено:** `lab_13_tb_processor_system.sv` (визуально по временной диаграмме — тестбенч без ассертов, как и предполагает методичка). На волнах проверяются: рост `program_counter`, посылки на `ps2_clk`/`ps2_dat`, реакция `hex_led_o`/`hex_sel_o`, срабатывание и сброс прерывания (`irq`/`mret`), значение `mie`.
-
-**Файлы, специфичные для варианта:** `ps2_sb_ctrl.sv`, `hex_sb_ctrl.sv`, `processor_system.sv`.
